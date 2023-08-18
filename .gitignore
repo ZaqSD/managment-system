@@ -28,6 +28,9 @@ replay_pid*
 # dependencies
 /node_modules
 /.pnp
+/.gradle
+/.idea
+/frontend/generated
 .pnp.js
 
 # testing
