@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
+import Home from '../src/views/Home'
 import {
   createBrowserRouter,
   RouterProvider,
@@ -9,7 +10,7 @@ import "./index.css";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <div>Hello world!</div>,
+    element: <Home />,
   },
 ]);
 
