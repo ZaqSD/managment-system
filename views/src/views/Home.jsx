@@ -1,8 +1,8 @@
-import AppBar from '../components/AppBar.tsx'
+import NavBar from '../components/NavBar.tsx'
 export default function Home() {
 
     return (
     <>
-        <AppBar />
+        <NavBar />
     </>)
 }
