@@ -30,6 +30,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
+//TODO Placeholder
 function getAddresses(id) {
   const addresses = [
       {cusId: 1, street: 'Beispielallee 10A', plz: '8048', city: 'Zurich', country: 'Switzerland'},
@@ -39,6 +40,7 @@ function getAddresses(id) {
   return addresses.filter(address => address.cusId === id);
 }
 
+//TODO Placeholder
 function getCustomers(){
   const users = [
       {id: 1, name: 'Andreas Siaplaouras'},

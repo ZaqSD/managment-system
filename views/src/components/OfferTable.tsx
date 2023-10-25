@@ -8,7 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-const categories = [{name: 'Id'}, {name: 'Type'}, {name: 'Customer'}, {name: 'Adresse'}, {name: 'Positions'}]
+const categories = [{name: 'Id'}, {name: 'Type'}, {name: 'Customer'}, {name: 'Address'}, {name: 'Positions'}]
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
