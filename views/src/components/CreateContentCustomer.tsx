@@ -4,6 +4,11 @@ import Typography from '@mui/material/Typography';
 import { Box, DialogActions, FormControl, MenuItem, TextField } from '@mui/material';
 import CreateDialogActions from './CreateDialogActions.tsx';
 
+type customerProps = {
+    id: number
+    name: string;
+  };
+
 interface CreateContentCustomerProps{
     handler: () => void;
 }
@@ -14,20 +19,66 @@ export default function CreateContentCustomer(props: CreateContentCustomerProps)
     const [createAddressPlz, setCreateAddressPlz] = React.useState('');
     const [createAddressCity, setCreateAddressCity] = React.useState('');
     const [createAddressCountry, setCreateAddressCountry] = React.useState('');
-    const [createAddressNextId, setCreateAddressNextId] = React.useState(1);
+    const [createAddressNextId, setCreateAddressNextId] = React.useState(GetCustomers().length);
 
-    const [addresses, setAddresses] = React.useState([{ id: 0, street: '', plz: '', city: '', country:'' }]);
+    const addresses = [{ street: '', plz: '', city: '', country:'' }];
 
     const newCustomer: {
-        name: string,
-        addresses: [{street: string, plz: string, city: string, country: string}],
+        name: string
+        addresses: {street: string, plz: string, city: string, country: string}[]
     }[] = [];
 
+    async function PostAddress(newAddress: {customerId: string, street: string, plz: string, city: string, country: string}) {
+        await fetch('http://localhost:8080/address', {
+        method: 'POST',
+        body: JSON.stringify(newAddress),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+        })
+        .then((response) => {response.json(); console.log(response);})
+        .catch((err) => {
+            console.log(err.message);
+        });
+    }
+
+    async function PostCustomer() {
+        await fetch('http://localhost:8080/customer', {
+        method: 'POST',
+        body: JSON.stringify(newCustomer[0]),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+        })
+        .then((response) => {response.json(); console.log(response);})
+        .catch((err) => {
+            console.log(err.message);
+        });
+    }
+
+    function GetCustomers(){    
+        const [customers, setCustomers] = React.useState<customerProps[]>([]);
+          fetch('http://localhost:8080/customer', {method: 'GET'})
+              .then((response) => response.json())
+              .then((data) => {
+                setCustomers(data);
+              })
+              .catch((err) => {
+                console.log(err.message);
+              });  
+        return customers;
+      }
+
     function addAddress(){
-        setAddresses([
-            ...addresses, { id: createAddressNextId, street: createAddressStreet, plz: createAddressPlz, city: createAddressCity, country: createAddressCountry }
-        ]);
+        
+        addresses.push({
+            street: createAddressStreet,
+            plz: createAddressPlz,
+            city: createAddressCity,
+            country: createAddressCountry
+        })
         setCreateAddressNextId(createAddressNextId + 1);
+
     }
 
     function handleChangeName(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>){
@@ -53,13 +104,17 @@ export default function CreateContentCustomer(props: CreateContentCustomerProps)
     function submit() {
         newCustomer.push({
             name: createName,
-            addresses: [{
-                street: createAddressStreet,
-                plz: createAddressPlz,
-                city: createAddressCity,
-                country: createAddressCountry
-            }]
+            addresses: addresses
         });
+
+        PostCustomer();
+
+        /*
+        addresses.forEach((address) => {
+            PostAddress(address);
+        })
+        */
+       
         props.handler();
     }
 
@@ -104,13 +159,11 @@ export default function CreateContentCustomer(props: CreateContentCustomerProps)
                 onClick={() => addAddress()}
             >Add</Button>
             <div>
-                    {addresses.map(address => {
-                        if(address.id !== 0){
-                            return(
-                                <p className=''><b>{address.id} |</b> {address.street}, {address.plz}, {address.city}, {address.country}</p>
-                            )
-                        } else {return ''}
-                    })}
+                {addresses.map(address => {
+                    return(
+                        <p className=''><b> |</b> {address.street}, {address.plz}, {address.city}, {address.country}</p>
+                    )
+                })}
                 </div>
         </Box>
         <CreateDialogActions submit={submit} handler={props.handler}/>
