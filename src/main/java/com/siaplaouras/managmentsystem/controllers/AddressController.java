@@ -4,6 +4,7 @@ import com.siaplaouras.managmentsystem.models.Address;
 import com.siaplaouras.managmentsystem.services.AddressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +31,15 @@ public class AddressController {
             return ResponseEntity.notFound().build();
         }
     }
-
+    @GetMapping("customer/{id}/addresses")
+    public ResponseEntity<List<Address>> getAddressByCustomerId(@PathVariable final UUID id){
+        List<Address> addresses = addressService.getAddressesByCustomerId(id);
+        if(addresses.isEmpty()){
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(addresses);
+        }
+    }
     @DeleteMapping("address/{id}")
     public void deleteAddress(@PathVariable final UUID id){
       addressService.delete(id);

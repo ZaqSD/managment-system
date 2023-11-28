@@ -36,6 +36,12 @@ public class AddressService {
     public List<Address> getAddressesByPlz(final String plz){
         return addressRepository.findByPlz(plz);
     }
+
+    public List<Address> getAddressesByCustomerId(final UUID id){
+        return addressRepository.findByCustomerId(id);
+    }
     public Address save(final Address address){return addressRepository.save(address);}
     public void delete(final UUID id){addressRepository.deleteById(id);}
+    public void deleteByCustomerId(final UUID id){addressRepository.findByCustomerId(id);}
+
 }

@@ -1,6 +1,7 @@
 package com.siaplaouras.managmentsystem.controllers;
 
 import com.siaplaouras.managmentsystem.models.Customer;
+import com.siaplaouras.managmentsystem.services.AddressService;
 import com.siaplaouras.managmentsystem.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class CustomerController {
     final CustomerService customerService;
+    final AddressService addressService;
 
     @GetMapping("customer")
     public List<Customer> getAllCustomers(){
@@ -34,10 +36,12 @@ public class CustomerController {
     @DeleteMapping("customer/{id}")
     public void deleteCustomer(@PathVariable final UUID id){
         customerService.delete(id);
+        addressService.deleteByCustomerId(id);
     }
 
     @PostMapping("customer")
     public ResponseEntity<Customer> postCustomer(@RequestBody final Customer customer){
+        customer.getAddresses().forEach(ad -> ad.setCustomer(customer));
         return ResponseEntity.ok(customerService.save(customer));
     }
 }
