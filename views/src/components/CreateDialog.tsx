@@ -6,13 +6,22 @@ import CreateContentCustomer from './CreateContentCustomer.tsx';
 import CreateContentOffer from './CreateContentOffer.tsx';
 
 export interface SimpleDialogProps {
-  open: boolean;
-  page: string;
-  handler: () => void;
+//CreateProps
+    open: boolean;
+    page: string;
+    handler: () => void;
+//UpdateProps
+    update?: string;
+    customerId?:  string;
+    offerId?: string;
 }
 
 export default function CreateDialog(props: SimpleDialogProps) {
     const [createType, setCreateType] = React.useState(props.page);
+
+    if (props.update) {
+        setCreateType(props.update)
+    }
 
     function getContent() {
         if (createType === 'customer'){
@@ -33,18 +42,23 @@ export default function CreateDialog(props: SimpleDialogProps) {
         <DialogTitle>Create something</DialogTitle>
             <DialogContent>
                 <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Create a new what</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        defaultValue={props.page}
-                        label="Create a new what"
-                        onChange={event => handleChange(event)}
-                        sx={{minWidth: 552, marginRight: 2}}
-                        >
-                        <MenuItem value={'customer'}>Customer</MenuItem>
-                        <MenuItem value={'offer'}>Offer</MenuItem>
-                    </Select>
+                    { !props.update ? (
+                        <>
+                            <InputLabel id="demo-simple-select-label">Create a new what</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                defaultValue={props.page}
+                                label="Create a new what"
+                                onChange={event => handleChange(event)}
+                                sx={{minWidth: 552, marginRight: 2}}
+                            >
+                            <MenuItem value={'customer'}>Customer</MenuItem>
+                            <MenuItem value={'offer'}>Offer</MenuItem>
+                            </Select>
+                        </>
+                    
+                    ) : '' }
                     {getContent()}
                 </FormControl>
             </DialogContent>
