@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -13,7 +14,7 @@ import java.util.List;
 public class Customer {
     @Id
     @GeneratedValue
-    private int id;
+    private UUID id;
     @Lob
     private String name;
     @Transient

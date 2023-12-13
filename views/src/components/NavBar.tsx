@@ -16,8 +16,8 @@ export default function NavBar(props: NavBarProps) {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Managment System
           </Typography>
-          <Button color="inherit" onClick={() => props.setPage('customers')} >Customers</Button>
-          <Button color="inherit" onClick={() => props.setPage('offers')} >Offers</Button>
+          <Button color="inherit" onClick={() => props.setPage('customer')} >Customers</Button>
+          <Button color="inherit" onClick={() => props.setPage('offer')} >Offers</Button>
         </Toolbar>
       </AppBar>
     </Box>

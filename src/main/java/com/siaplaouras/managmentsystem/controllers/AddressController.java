@@ -31,6 +31,16 @@ public class AddressController {
         }
     }
 
+    @GetMapping("customer/{id}/address")
+    public ResponseEntity<List<Address>> getAddressesbyCustomerId(@PathVariable final UUID id){
+        final var addresses = addressService.getAddressesByCustomerId(id);
+        if(addresses != null){
+            return ResponseEntity.ok(addresses);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @DeleteMapping("address/{id}")
     public void deleteAddress(@PathVariable final UUID id){
       addressService.delete(id);

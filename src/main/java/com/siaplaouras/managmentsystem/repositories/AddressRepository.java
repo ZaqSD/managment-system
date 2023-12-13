@@ -11,4 +11,5 @@ public interface AddressRepository extends JpaRepository<Address, UUID> {
     List<Address> findByCityAndCountry(final String city, final String country);
     List<Address> findByPlz(final String plz);
     List<Address> findByCountry(final String country);
+    List<Address> findByCustomerId(final UUID customerId);
 }

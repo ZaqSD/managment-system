@@ -9,13 +9,13 @@ import { Button } from '@mui/material';
 import CreateDialog from '../components/CreateDialog.tsx';
 
 export default function Home() {
-    const [page, setPage] = useState("customers");
+    const [page, setPage] = useState('customer');
     const [openCreateDialog, setOpenCreateDialog] = useState(false)
 
     let table;
-    if (page === "customers"){
+    if (page === 'customer'){
         table = <CustomerTable />;
-    } else if (page === "offers"){
+    } else if (page === 'offer'){
         table = <OfferTable />;
     }
 
@@ -27,7 +27,7 @@ export default function Home() {
         <>
             <NavBar setPage={setPage}/>
             <Container>
-                <CreateDialog open={openCreateDialog} page={page} handler={handleCreateDialog}/>
+                <CreateDialog open={openCreateDialog} page={page} update={false} handler={handleCreateDialog}/>
                 <Button onClick={() => handleCreateDialog()} variant='contained' color='primary' sx={{height: 40, width: 100, margin: 2, marginLeft: 0}}>Create</Button>
                 {table}
             </Container>

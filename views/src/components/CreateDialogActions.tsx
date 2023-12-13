@@ -4,6 +4,8 @@ import React from "react";
 interface CreateDialogActionsProps{
     submit: () => void;
     handler: () => void;
+    isUpdate: boolean;
+    update: () => void;
 }
 
 export default function CreateDialogActions(props: CreateDialogActionsProps) {

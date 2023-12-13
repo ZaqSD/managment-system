@@ -10,6 +10,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
+import UpdateDialog from './CreateDialog.tsx';
 
 interface customerProps {
   id: string,
@@ -45,69 +46,81 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function CustomerTable() {
+function GetAddresses() {
+  const [addresses, setAddresses] = React.useState<addressProps[]>([]);
 
+    fetch('http://localhost:8080/address',
+      {method: 'GET'})
+      .then((response) => response.json())
+      .then((data) => {
+          setAddresses(data);
+      })
+      .catch((err) => {
+          console.log(err.message);
+      });  
+
+      return addresses;
+}
+
+function GetCustomers(){
+  const [customers, setCustomers] = React.useState<customerProps[]>([]);
+
+  React.useEffect( () => {
+    fetch('http://localhost:8080/customer', {method: 'GET'})
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setCustomers(data);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });  
+    }, []);
+  return customers;
+}
+
+//TODO Placeholder
+function updateCustomer(id: string){
+
+}
+
+function DeleteCustomer(id: string){
+  React.useEffect( () => {
+    fetch('http://localhost:8080/customer', {method: 'DELETE'})
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });  
+    }, []);
+}
+
+export default function CustomerTable() {
+  const [openUpdateDialog, setOpenUpdateDialog] = React.useState(false);
+  const [updateCustomerId, setUpdateCustomerId] = React.useState('');
   const categories = [{name: 'Name'}, {name: 'Addresses'}, {name: 'Actions'}]
   const allAddresses = GetAddresses();
 
-  function GetAddresses() {
-    const [addresses, setAddresses] = React.useState<addressProps[]>([]);
-
-      fetch('http://localhost:8080/address',
-        {method: 'GET'})
-        .then((response) => response.json())
-        .then((data) => {
-            setAddresses(data);
-        })
-        .catch((err) => {
-            console.log(err.message);
-        });  
-
-        return addresses;
-  }
-
-  function GetCustomers(){
-    const [customers, setCustomers] = React.useState<customerProps[]>([]);
-
-    React.useEffect( () => {
-      fetch('http://localhost:8080/customer', {method: 'GET'})
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-            setCustomers(data);
-          })
-          .catch((err) => {
-            console.log(err.message);
-          });  
-      }, []);
-    return customers;
-  }
-
-  //TODO Placeholder
-  function updateCustomer(id: string){
-
-  }
-
-  //TODO Placeholder
-  function DeleteCustomer(id: string){
-    React.useEffect( () => {
-      fetch('http://localhost:8080/customer', {method: 'DELETE'})
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-          })
-          .catch((err) => {
-            console.log(err.message);
-          });  
-      }, []);
-  }
-
   function editCustomer(id: string){
+    setUpdateCustomerId(id);
+    handleUpdateDialog();
+  }
 
+  function handleUpdateDialog(){
+    setOpenUpdateDialog(!openUpdateDialog)
   }
 
   return (
     <TableContainer component={Paper}>
+      <UpdateDialog
+        open={openUpdateDialog}
+        page={'customer'}
+        handler={handleUpdateDialog}
+        update={true}
+        customerId={updateCustomerId}
+      />
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
@@ -120,6 +133,7 @@ export default function CustomerTable() {
         </TableHead>
         <TableBody>
           {GetCustomers().map((customer) => (
+            <>
             <StyledTableRow key={customer.id}>
                 <StyledTableCell>{customer.name}</StyledTableCell>
                 <StyledTableCell>
@@ -127,11 +141,12 @@ export default function CustomerTable() {
                     <p>{filteredAddress.street}, {filteredAddress.plz} {filteredAddress.city}, {filteredAddress.country}</p>
                   ))}
                 </StyledTableCell>
-                <StyledTableCell sx={{maxWidth: 10}}>
+                <StyledTableCell sx={{minWidth: 55, maxWidth: 10}}>
                   <Button variant='contained' color='warning' sx={{marginRight: 1}} onClick={() => editCustomer(customer.id)}><EditIcon /></Button>
                   <Button variant='contained' color='error' onClick={() => DeleteCustomer(customer.id)}><DeleteIcon /></Button>
                 </StyledTableCell>
             </StyledTableRow>
+            </>
           ))}
         </TableBody>
       </Table>

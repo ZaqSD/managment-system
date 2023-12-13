@@ -1,6 +1,8 @@
 package com.siaplaouras.managmentsystem.controllers;
 
+import com.google.common.base.Strings;
 import com.siaplaouras.managmentsystem.models.Customer;
+import com.siaplaouras.managmentsystem.services.AddressService;
 import com.siaplaouras.managmentsystem.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import java.util.UUID;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class CustomerController {
     final CustomerService customerService;
+    final AddressService addressService;
 
     @GetMapping("customer")
     public List<Customer> getAllCustomers(){
@@ -38,6 +41,13 @@ public class CustomerController {
 
     @PostMapping("customer")
     public ResponseEntity<Customer> postCustomer(@RequestBody final Customer customer){
-        return ResponseEntity.ok(customerService.save(customer));
+        var customerResponse = customerService.save(customer);
+        customer.getAddresses().forEach((address -> {
+            if(!Strings.isNullOrEmpty(address.getCity()) && !Strings.isNullOrEmpty(address.getPlz()) && !Strings.isNullOrEmpty(address.getCountry()) && !Strings.isNullOrEmpty(address.getStreet())){
+                address.setCustomerId(customerResponse.getId());
+                addressService.save(address);
+            }
+        }));
+        return ResponseEntity.ok(customerResponse);
     }
 }

@@ -24,17 +24,17 @@ public class AddressService {
     public List<Address> getAddressesByCity(final String city){
         return addressRepository.findByCity(city);
     }
-
     public List<Address> getAddressesByCountry(final String country){
         return addressRepository.findByCountry(country);
     }
-
     public List<Address> getAddressesByCityAndCountry(final String city, final String country){
         return addressRepository.findByCityAndCountry(city, country);
     }
-
     public List<Address> getAddressesByPlz(final String plz){
         return addressRepository.findByPlz(plz);
+    }
+    public List<Address> getAddressesByCustomerId(final UUID customerId){
+        return addressRepository.findByCustomerId(customerId);
     }
     public Address save(final Address address){return addressRepository.save(address);}
     public void delete(final UUID id){addressRepository.deleteById(id);}

@@ -17,7 +17,7 @@ public class Address {
     @Id
     @GeneratedValue
     private UUID id;
-    private int customerId;
+    private UUID customerId;
     @Lob
     private String street;
     private String plz;
