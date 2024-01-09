@@ -12,6 +12,7 @@ import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
 import UpdateDialog from './CreateDialog.tsx';
 import { useFetchCustomers as useFetchData } from '../hooks/UseFetchData.tsx';
+import DeleteDialog from './DeleteDialog.tsx';
 
 interface customerProps {
   id: string,
@@ -83,7 +84,12 @@ function DeleteCustomer(id: string){
 
 export default function CustomerTable() {
   const [openUpdateDialog, setOpenUpdateDialog] = React.useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   const [updateCustomerId, setUpdateCustomerId] = React.useState('');
+
+  const [deleteDialogId, setDeleteDialogId] = React.useState('');
+  const [deleteDialogName, setDeleteDialogName] = React.useState('');
+
   const categories = [{name: 'Name'}, {name: 'Addresses'}, {name: 'Actions'}]
   const customers: [] | {} = useFetchData('http://localhost:8080/customer');
   const allAddresses = GetAddresses();
@@ -95,6 +101,16 @@ export default function CustomerTable() {
 
   function handleUpdateDialog(){
     setOpenUpdateDialog(!openUpdateDialog)
+  }
+
+  function handleDeleteDialog(){
+    setOpenDeleteDialog(!openDeleteDialog)
+  }
+
+  function handleDeleteClick(id: string, name: string){
+    setDeleteDialogId(id);
+    setDeleteDialogName(name);
+    handleDeleteDialog();
   }
 
   return (
@@ -117,20 +133,27 @@ export default function CustomerTable() {
           </TableRow>
         </TableHead>
         <TableBody>
+          <DeleteDialog 
+            id={deleteDialogId}
+            name={deleteDialogName}
+            type={'customer'}
+            open={openDeleteDialog}
+            handler={handleDeleteDialog}
+          />
           {customers.map((customer) => (
             <>
-            <StyledTableRow key={customer.id}>
-                <StyledTableCell>{customer.name}</StyledTableCell>
-                <StyledTableCell>
-                  {allAddresses.filter(address => address.customerId.toString() === customer.id.toString()).map(filteredAddress => (
-                    <p>{filteredAddress.street}, {filteredAddress.plz} {filteredAddress.city}, {filteredAddress.country}</p>
-                  ))}
-                </StyledTableCell>
-                <StyledTableCell sx={{minWidth: 55, maxWidth: 10}}>
-                  <Button variant='contained' color='warning' sx={{marginRight: 1}} onClick={() => editCustomer(customer.id)}><EditIcon /></Button>
-                  <Button variant='contained' color='error' onClick={() => DeleteCustomer(customer.id)}><DeleteIcon /></Button>
-                </StyledTableCell>
-            </StyledTableRow>
+              <StyledTableRow key={customer.id}>
+                  <StyledTableCell>{customer.name}</StyledTableCell>
+                  <StyledTableCell>
+                    {allAddresses.filter(address => address.customerId.toString() === customer.id.toString()).map(filteredAddress => (
+                      <p>{filteredAddress.street}, {filteredAddress.plz} {filteredAddress.city}, {filteredAddress.country}</p>
+                    ))}
+                  </StyledTableCell>
+                  <StyledTableCell sx={{minWidth: 55, maxWidth: 10}}>
+                    <Button variant='contained' color='warning' sx={{marginRight: 1}} onClick={() => editCustomer(customer.id)}><EditIcon /></Button>
+                    <Button variant='contained' color='error' onClick={() => handleDeleteClick(customer.id, customer.name)}><DeleteIcon /></Button>
+                  </StyledTableCell>
+              </StyledTableRow>
             </>
           ))}
         </TableBody>
