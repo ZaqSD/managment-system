@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -7,8 +9,26 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { Button } from '@mui/material';
 
-const categories = [{name: 'Id'}, {name: 'Type'}, {name: 'Customer'}, {name: 'Address'}, {name: 'Positions'}]
+interface offerProps {
+  id: number,
+  type: string,
+  customer: string,
+  address: string
+  positions: [{posNr: string, name: string, amount: string, price: string}]
+};
+
+interface addressProps {
+  id: number,
+  customerId: string,
+  street: string,
+  plz: string,
+  city: string,
+  country: string,
+};
+
+const categories = [{name: 'Id'}, {name: 'Type'}, {name: 'Customer'}, {name: 'Address'}, {name: 'Positions'}, {name: 'Actions'}]
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -30,13 +50,31 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function getOffers(){
-  const offers = [
-      {id: 1, type: "Offer", customer: "Andreas Siaplaouras", address: "Beispielallee 10A, 8048 ZH Zürich", positions:[{posNr: "1", name: "Item 5A", amount: "1", price: "$20.00"}]},
-      {id: 2, type: "Order", customer: "Andreas Siaplaouras", address: "Beispielallee 10A, 8048 ZH Zürich", positions:[{posNr: "1", name: "Item 79C", amount: "5", price: "$100.00"}]},
-      {id: 3, type: "Invoice", customer: "Private AG", address: "605 La Cienega, 90012 CA Culver City", positions:[{posNr: "1", name: "Item 5A", amount: "1", price: "$20.00"}, {posNr: "2", name: "Item 5B", amount: "4", price: "$84.00"}, {posNr: "3", name: "Service 22", amount: "1", price: "$250.00"}]}
-  ]
-  return offers;
+function GetOffers(){
+  const [offers, setOffers] = React.useState<offerProps[]>([]);
+  fetch('http://localhost:8080/offer', {method: 'GET'})
+      .then((response) => response.json())
+      .then((data) => {
+        setOffers(data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });  
+return offers;
+}
+
+//TODO Placeholder
+function updateOffer(id: number){
+
+}
+
+//TODO Placeholder
+function deleteOffer(id: number){
+
+}
+
+function editOffer(id: number){
+
 }
 
 export default function CustomizedTables() {
@@ -54,7 +92,7 @@ export default function CustomizedTables() {
           </TableRow>
         </TableHead>
         <TableBody>
-        {getOffers().map((offer) => (
+        {GetOffers().map(offer => (
             <StyledTableRow key={offer.id}>
                 <StyledTableCell>{offer.id}</StyledTableCell>
                 <StyledTableCell>{offer.type}</StyledTableCell>
@@ -65,6 +103,10 @@ export default function CustomizedTables() {
                     <p>{position.posNr}, {position.name}, {position.amount}x, {position.price}</p>
                   ))}
                 </StyledTableCell>
+                  <StyledTableCell>
+                    <Button variant='contained' color='warning' sx={{marginRight: 1}} onClick={() => editOffer(offer.id)}><EditIcon /></Button>
+                    <Button variant='contained' color='error' onClick={() => deleteOffer(offer.id)}><DeleteIcon /></Button>
+                  </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>

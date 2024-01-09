@@ -5,6 +5,8 @@ import { Box, DialogActions, FormControl, MenuItem, TextField } from '@mui/mater
 import CreateDialogActions from './CreateDialogActions.tsx';
 
 interface CreateContentOfferProps{
+    update?: boolean;
+    offerId?: string;
     handler: () => void;
 }
 
