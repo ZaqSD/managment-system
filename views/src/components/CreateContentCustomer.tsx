@@ -5,7 +5,7 @@ import { Box, DialogActions, FormControl, MenuItem, TextField } from '@mui/mater
 import CreateDialogActions from './CreateDialogActions.tsx';
 import DialogAddress from './CreateDialogAddress.tsx';
 import { useFetchCustomers as useFetchData } from '../hooks/UseFetchData.tsx';
-import { UsePostCustomer } from '../hooks/UsePostCustomer.tsx';
+import { usePostCustomer } from '../hooks/UsePostCustomer.tsx';
 
 interface Customer{
     id: number
@@ -134,7 +134,7 @@ export default function CreateContentCustomer(props: CreateContentCustomerProps)
         props.handler();
     }
 
-    const submit = () => UsePostCustomer(
+    const submit = () => usePostCustomer(
         'http://localhost:8080/customer',
         {id: 'Test', name: 'Andreas', addresses: [{id: 'test', street:'Test', plz: '8888', city: 'test', country: 'test'}]}
     );
@@ -202,7 +202,7 @@ export default function CreateContentCustomer(props: CreateContentCustomerProps)
                     {addresses.map((address, index) => {
                         if (index !== 0){
                             return(
-                                <DialogAddress index={index} street={address.street} plz={address.plz} city={address.city} country={address.country}/> 
+                                <DialogAddress key={index} index={index} street={address.street} plz={address.plz} city={address.city} country={address.country}/> 
                             )
                         } else {
                             return ''

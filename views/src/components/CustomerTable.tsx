@@ -11,7 +11,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
 import UpdateDialog from './CreateDialog.tsx';
-import { useFetchCustomers as useFetchData } from '../hooks/UseFetchData.tsx';
+import { Customer, useFetchCustomers as useFetchData } from '../hooks/UseFetchData.tsx';
 import DeleteDialog from './DeleteDialog.tsx';
 
 interface customerProps {
@@ -91,7 +91,7 @@ export default function CustomerTable() {
   const [deleteDialogName, setDeleteDialogName] = React.useState('');
 
   const categories = [{name: 'Name'}, {name: 'Addresses'}, {name: 'Actions'}]
-  const customers: [] | {} = useFetchData('http://localhost:8080/customer');
+  const customers: [] | Customer[] = useFetchData('http://localhost:8080/customer');
   const allAddresses = GetAddresses();
 
   function editCustomer(id: string){
@@ -127,7 +127,7 @@ export default function CustomerTable() {
           <TableRow>
             {categories.map((category, index) => {
                 return (
-                    <StyledTableCell align="left">{category.name}</StyledTableCell>
+                    <StyledTableCell key={index} align="left">{category.name}</StyledTableCell>
                 );
             })}
           </TableRow>
@@ -146,7 +146,7 @@ export default function CustomerTable() {
                   <StyledTableCell>{customer.name}</StyledTableCell>
                   <StyledTableCell>
                     {allAddresses.filter(address => address.customerId.toString() === customer.id.toString()).map(filteredAddress => (
-                      <p>{filteredAddress.street}, {filteredAddress.plz} {filteredAddress.city}, {filteredAddress.country}</p>
+                      <p key={filteredAddress.id}>{filteredAddress.street}, {filteredAddress.plz} {filteredAddress.city}, {filteredAddress.country}</p>
                     ))}
                   </StyledTableCell>
                   <StyledTableCell sx={{minWidth: 55, maxWidth: 10}}>

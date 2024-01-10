@@ -8,7 +8,7 @@ interface Address {
   country: string,
 };
 
-interface Customer {
+export interface Customer {
   id: string,
   name: string,
   addresses?: Address[]

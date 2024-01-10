@@ -8,13 +8,13 @@ interface Address {
   country: string,
 };
 
-interface Customer {
+export interface Customer {
   id: string,
   name: string,
   addresses?: Address[]
 };
 
-export const UsePostCustomer: (url: string, customer: Customer) => void = (url: string, customer: Customer) => {
+export const usePostCustomer: (url: string, customer: Customer) => void = (url: string, customer: Customer) => {
   useEffect(() => {
     fetch(url, {
       method: 'POST',
