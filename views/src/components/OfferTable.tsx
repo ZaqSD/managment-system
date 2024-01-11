@@ -28,7 +28,7 @@ interface addressProps {
   country: string,
 };
 
-const categories = [{name: 'Id'}, {name: 'Type'}, {name: 'Customer'}, {name: 'Address'}, {name: 'Positions'}, {name: 'Actions'}]
+const categories = [{name: 'Type'}, {name: 'Customer'}, {name: 'Address'}, {name: 'Positions'}, {name: 'Actions'}]
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -81,7 +81,7 @@ export default function CustomizedTables() {
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <Table sx={{ minWidth: '100%' }} aria-label="customized table">
         <TableHead>
           <TableRow>
             {categories.map((category, index) => {
@@ -94,19 +94,18 @@ export default function CustomizedTables() {
         <TableBody>
         {GetOffers().map(offer => (
             <StyledTableRow key={offer.id}>
-                <StyledTableCell>{offer.id}</StyledTableCell>
-                <StyledTableCell>{offer.type}</StyledTableCell>
-                <StyledTableCell>{offer.customer}</StyledTableCell>
-                <StyledTableCell>{offer.address}</StyledTableCell>
-                <StyledTableCell>
+                <StyledTableCell sx={{width: '10%'}}>{offer.type}</StyledTableCell>
+                <StyledTableCell sx={{width: '20%'}}>{offer.customer}</StyledTableCell>
+                <StyledTableCell sx={{width: '30%'}}>{offer.address}</StyledTableCell>
+                <StyledTableCell sx={{width: '30%'}}>
                   {offer.positions.map((position) => (
                     <p>{position.posNr}, {position.name}, {position.amount}x, {position.price}</p>
                   ))}
                 </StyledTableCell>
-                  <StyledTableCell>
-                    <Button variant='contained' color='warning' sx={{marginRight: 1}} onClick={() => editOffer(offer.id)}><EditIcon /></Button>
-                    <Button variant='contained' color='error' onClick={() => deleteOffer(offer.id)}><DeleteIcon /></Button>
-                  </StyledTableCell>
+                <StyledTableCell sx={{width: '10%'}}>
+                  <Button variant='contained' color='warning' sx={{marginRight: 1}} onClick={() => editOffer(offer.id)}><EditIcon /></Button>
+                  <Button variant='contained' color='error' onClick={() => deleteOffer(offer.id)}><DeleteIcon /></Button>
+                </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>

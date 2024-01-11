@@ -114,50 +114,50 @@ export default function CustomerTable() {
   }
 
   return (
-    <TableContainer component={Paper}>
-      <UpdateDialog
-        open={openUpdateDialog}
-        page={'customer'}
-        handler={handleUpdateDialog}
-        update={true}
-        customerId={updateCustomerId}
-      />
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            {categories.map((category, index) => {
-                return (
-                    <StyledTableCell key={index} align="left">{category.name}</StyledTableCell>
-                );
-            })}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          <DeleteDialog 
-            id={deleteDialogId}
-            name={deleteDialogName}
-            type={'customer'}
-            open={openDeleteDialog}
-            handler={handleDeleteDialog}
-          />
-          {customers.map((customer) => (
-            <>
-              <StyledTableRow key={customer.id}>
-                  <StyledTableCell>{customer.name}</StyledTableCell>
-                  <StyledTableCell>
-                    {allAddresses.filter(address => address.customerId.toString() === customer.id.toString()).map(filteredAddress => (
-                      <p key={filteredAddress.id}>{filteredAddress.street}, {filteredAddress.plz} {filteredAddress.city}, {filteredAddress.country}</p>
-                    ))}
-                  </StyledTableCell>
-                  <StyledTableCell sx={{minWidth: 55, maxWidth: 10}}>
-                    <Button variant='contained' color='warning' sx={{marginRight: 1}} onClick={() => editCustomer(customer.id)}><EditIcon /></Button>
-                    <Button variant='contained' color='error' onClick={() => handleDeleteClick(customer.id, customer.name)}><DeleteIcon /></Button>
-                  </StyledTableCell>
-              </StyledTableRow>
-            </>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+      <TableContainer component={Paper}>
+            <UpdateDialog
+              open={openUpdateDialog}
+              page={'customer'}
+              handler={handleUpdateDialog}
+              update={true}
+              customerId={updateCustomerId}
+            />
+            <Table sx={{ minWidth: '100%' }} aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  {categories.map((category, index) => {
+                      return (
+                          <StyledTableCell key={index} align="left">{category.name}</StyledTableCell>
+                      );
+                  })}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <DeleteDialog 
+                  id={deleteDialogId}
+                  name={deleteDialogName}
+                  type={'customer'}
+                  open={openDeleteDialog}
+                  handler={handleDeleteDialog}
+                />
+                {customers.map((customer) => (
+                  <>
+                    <StyledTableRow key={customer.id}>
+                        <StyledTableCell sx={{width: '40%'}} key={customer.name}>{customer.name}</StyledTableCell>
+                        <StyledTableCell sx={{width: '40%'}} key={customer.id + '_addresses'}>
+                          {allAddresses.filter(address => address.customerId.toString() === customer.id.toString()).map(filteredAddress => (
+                            <p key={filteredAddress.id}>{filteredAddress.street}, {filteredAddress.plz} {filteredAddress.city}, {filteredAddress.country}</p>
+                          ))}
+                        </StyledTableCell>
+                        <StyledTableCell sx={{width: '20%'}} key={customer.id + '_actions'} sx={{minWidth: 55, maxWidth: 10}}>
+                          <Button key={customer.id + '_edit'} variant='contained' color='warning' sx={{marginRight: 1}} onClick={() => editCustomer(customer.id)}><EditIcon /></Button>
+                          <Button key={customer.id + '_delete'} variant='contained' color='error' onClick={() => handleDeleteClick(customer.id, customer.name)}><DeleteIcon /></Button>
+                        </StyledTableCell>
+                    </StyledTableRow>
+                  </>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>    
   );
 }
